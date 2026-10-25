@@ -20,6 +20,9 @@ relaydesk = "relaydesk.cli:main"
 [tool.setuptools.packages.find]
 include = ["relaydesk*"]
 
+[tool.setuptools.package-data]
+relaydesk = ["schema.sql"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

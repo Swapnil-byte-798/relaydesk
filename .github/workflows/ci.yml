@@ -1,0 +1,49 @@
+name: Python checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e '.[api,dev]'
+      - run: python -m pytest -q
+      - run: python scripts/evaluate.py
+
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: relaydesk
+          POSTGRES_PASSWORD: test-only-password
+          POSTGRES_DB: relaydesk_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U relaydesk -d relaydesk_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      RELAYDESK_TEST_DATABASE_URL: postgresql+psycopg://relaydesk:test-only-password@127.0.0.1:5432/relaydesk_test
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[postgres,dev]'
+      - run: python -m pytest tests/test_support.py tests/test_provider.py -q

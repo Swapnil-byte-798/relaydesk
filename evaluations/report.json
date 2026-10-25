@@ -1,0 +1,655 @@
+{
+  "mode": "rules",
+  "dataset": "50 synthetic scripted conversations",
+  "live_llm_evaluated": false,
+  "cases": 50,
+  "passed": 50,
+  "failed": 0,
+  "results": [
+    {
+      "id": "O01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O05",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "customer_isolation": true
+      },
+      "actual_status": "open",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O06",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "customer_isolation": true
+      },
+      "actual_status": "open",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O07",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O08",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O09",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "O10",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "R01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R05",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R06",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "customer_isolation": true,
+        "approval_count": true
+      },
+      "actual_status": "open",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R07",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R08",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "open",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R09",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "open",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R10",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R11",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "R12",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "T01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T05",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T06",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T07",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T08",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T09",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "T10",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "H01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H05",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H06",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H07",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "H08",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "C01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "open",
+      "actual_intent": "unknown"
+    },
+    {
+      "id": "C02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "unknown"
+    },
+    {
+      "id": "C03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "order"
+    },
+    {
+      "id": "C04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "C05",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "order_status": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "order"
+    },
+    {
+      "id": "C06",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "customer_isolation": true
+      },
+      "actual_status": "needs_human",
+      "actual_intent": "complaint"
+    },
+    {
+      "id": "E01",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "E02",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true,
+        "source": true
+      },
+      "actual_status": "resolved",
+      "actual_intent": "technical"
+    },
+    {
+      "id": "E03",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "approval_count": true
+      },
+      "actual_status": "waiting_approval",
+      "actual_intent": "refund"
+    },
+    {
+      "id": "E04",
+      "passed": true,
+      "checks": {
+        "status": true,
+        "intent": true,
+        "no_autonomous_refund": true,
+        "no_model_calls": true,
+        "customer_isolation": true
+      },
+      "actual_status": "open",
+      "actual_intent": "order"
+    }
+  ]
+}
