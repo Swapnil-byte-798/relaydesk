@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relaydesk"
+version = "0.1.0"
+description = "Python support agents with scoped order tools and human-approved sandbox refunds"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1"]
+postgres = ["SQLAlchemy>=2.0,<3", "psycopg[binary]>=3.2,<4"]
+dev = ["pytest>=8,<10", "httpx>=0.27,<1"]
+
+[project.scripts]
+relaydesk = "relaydesk.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["relaydesk*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
