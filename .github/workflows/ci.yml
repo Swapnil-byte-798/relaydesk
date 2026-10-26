@@ -55,7 +55,7 @@ jobs:
       - run: docker build -t relaydesk-test .
       - run: docker run -d --name relaydesk-test -p 127.0.0.1:8013:8013 relaydesk-test
       - name: Verify the container starts
-        run: curl --fail --retry 15 --retry-delay 1 --retry-connrefused http://127.0.0.1:8013/health
+        run: curl --fail --silent --show-error --retry 10 --retry-delay 1 --retry-all-errors --retry-max-time 30 --max-time 3 http://127.0.0.1:8013/health
       - name: Show startup logs on failure
         if: failure()
         run: docker logs relaydesk-test
