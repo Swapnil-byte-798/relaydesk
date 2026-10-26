@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: relaydesk
+      POSTGRES_DB: relaydesk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U relaydesk -d relaydesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8013:8013"
+    environment:
+      RELAYDESK_HOME: /data
+      RELAYDESK_DATABASE_URL: postgresql+psycopg://relaydesk:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/relaydesk
+    volumes:
+      - relaydesk_data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  relaydesk_data:

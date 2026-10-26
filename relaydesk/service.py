@@ -50,6 +50,17 @@ class SupportService:
         return session.all("SELECT role, content, created_at, sequence_no FROM messages WHERE workspace_id=:workspace AND ticket_id=:ticket ORDER BY sequence_no",
                            {"workspace": self.workspace, "ticket": ticket_id})
 
+    def _pending_approval(self, session: Session, ticket_id: str) -> dict | None:
+        return session.one("""SELECT a.id FROM approvals a JOIN ticket_approvals t ON t.approval_id=a.id
+            AND t.workspace_id=a.workspace_id WHERE a.workspace_id=:workspace AND t.ticket_id=:ticket
+            AND a.status='pending'""", {"workspace": self.workspace, "ticket": ticket_id})
+
+    def _summary(self, session: Session, ticket: dict, status: str) -> str:
+        recent = [message["content"] for message in self._messages(session, ticket["id"])
+                  if message["role"] == "customer"][-4:]
+        return (f"Customer {ticket['customer_id']}; intent {ticket['intent']}; status {status}. "
+                "Latest requests: " + " | ".join(recent))[:3000]
+
     def _append(self, session: Session, ticket_id: str, role: str, content: str, at: str) -> None:
         sequence = session.one("SELECT COALESCE(MAX(sequence_no), 0) + 1 AS next FROM messages WHERE workspace_id=:workspace AND ticket_id=:ticket",
                                {"workspace": self.workspace, "ticket": ticket_id})["next"]
@@ -91,8 +102,7 @@ class SupportService:
             now = self.clock()
             tools = SupportTools(session, self.workspace, ticket, now)
             outcome, routed, trace = SupportWorkflow(self.router).run(message, history, tools)
-            pending = session.one("SELECT id FROM approvals WHERE workspace_id=:workspace AND ticket_id=:ticket AND status='pending'",
-                                  {"workspace": self.workspace, "ticket": ticket_id})
+            pending = self._pending_approval(session, ticket_id)
             if pending and outcome.status != "needs_human":
                 outcome.status = "waiting_approval"
             run_id, at = str(uuid4()), now.isoformat()
@@ -169,13 +179,17 @@ class SupportService:
                      if decision == "approved" else f"Human review: the refund request for {order['id']} was declined. No refund was recorded.")
             if note.strip():
                 reply += " Reviewer note: " + note.strip()
-            self._append(session, ticket["id"], "human", reply, at)
-            other_pending = session.one("""SELECT id FROM approvals WHERE workspace_id=:workspace
-                AND ticket_id=:ticket AND status='pending'""", {"workspace": self.workspace, "ticket": ticket["id"]})
-            status = "needs_human" if ticket["status"] == "needs_human" else ("waiting_approval" if other_pending else "resolved")
-            session.execute("UPDATE tickets SET status=:status, updated_at=:at WHERE workspace_id=:workspace AND id=:id",
-                            {"status": status, "at": at, "workspace": self.workspace, "id": ticket["id"]})
-            self._event(session, ticket["id"], "human:refund_decision", f"{decision} by {actor}; sandbox ledger only", at)
+            followers = session.all("SELECT ticket_id FROM ticket_approvals WHERE workspace_id=:workspace AND approval_id=:approval",
+                                    {"workspace": self.workspace, "approval": approval_id})
+            for follower in followers:
+                related = self._ticket(session, follower["ticket_id"])
+                self._append(session, related["id"], "human", reply, at)
+                pending = self._pending_approval(session, related["id"])
+                status = "needs_human" if related["status"] == "needs_human" else ("waiting_approval" if pending else "resolved")
+                session.execute("UPDATE tickets SET status=:status, summary=:summary, updated_at=:at WHERE workspace_id=:workspace AND id=:id",
+                                {"status": status, "summary": self._summary(session, related, status),
+                                 "at": at, "workspace": self.workspace, "id": related["id"]})
+                self._event(session, related["id"], "human:refund_decision", f"{decision} by {actor}; sandbox ledger only", at)
             return session.one("SELECT * FROM approvals WHERE workspace_id=:workspace AND id=:id",
                                {"workspace": self.workspace, "id": approval_id})
 
@@ -188,11 +202,11 @@ class SupportService:
                 raise SupportError("This ticket is not in the human inbox.", 409)
             at = self.clock().isoformat()
             self._append(session, ticket_id, "human", message, at)
-            pending = session.one("SELECT id FROM approvals WHERE workspace_id=:workspace AND ticket_id=:ticket AND status='pending'",
-                                  {"workspace": self.workspace, "ticket": ticket_id})
+            pending = self._pending_approval(session, ticket_id)
             status = ("waiting_approval" if pending else "resolved") if resolve else "needs_human"
-            session.execute("UPDATE tickets SET status=:status, failed_attempts=0, updated_at=:at WHERE workspace_id=:workspace AND id=:id",
-                            {"status": status, "at": at, "workspace": self.workspace, "id": ticket_id})
+            session.execute("UPDATE tickets SET status=:status, summary=:summary, failed_attempts=0, updated_at=:at WHERE workspace_id=:workspace AND id=:id",
+                            {"status": status, "summary": self._summary(session, ticket, status),
+                             "at": at, "workspace": self.workspace, "id": ticket_id})
             self._event(session, ticket_id, "human:reply", "Operator replied" + (" and resolved the handoff" if resolve else ""), at)
             return self._ticket(session, ticket_id)
 
@@ -201,7 +215,8 @@ class SupportService:
             ticket = self._ticket(session, ticket_id)
             params = {"workspace": self.workspace, "ticket": ticket_id}
             return {**ticket, "messages": self._messages(session, ticket_id),
-                    "approvals": session.all("SELECT * FROM approvals WHERE workspace_id=:workspace AND ticket_id=:ticket ORDER BY created_at", params),
+                    "approvals": session.all("""SELECT a.* FROM approvals a JOIN ticket_approvals t ON t.approval_id=a.id
+                        AND t.workspace_id=a.workspace_id WHERE a.workspace_id=:workspace AND t.ticket_id=:ticket ORDER BY a.created_at""", params),
                     "events": session.all("SELECT * FROM events WHERE workspace_id=:workspace AND ticket_id=:ticket ORDER BY created_at, step", params)}
 
     def snapshot(self) -> dict:

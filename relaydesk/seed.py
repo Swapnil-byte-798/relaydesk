@@ -7,6 +7,9 @@ from .database import Session
 def seed_workspace(session: Session, workspace: str, now: datetime) -> None:
     session.execute("INSERT INTO workspaces(id, created_at) VALUES (:id, :at) ON CONFLICT (id) DO NOTHING",
                     {"id": workspace, "at": now.isoformat()})
+    session.execute("""INSERT INTO ticket_approvals(workspace_id, ticket_id, approval_id)
+        SELECT workspace_id, ticket_id, id FROM approvals WHERE workspace_id=:workspace
+        ON CONFLICT (ticket_id, approval_id) DO NOTHING""", {"workspace": workspace})
     customers = [("maya", "Maya Rao", "maya@example.test"), ("rohan", "Rohan Shah", "rohan@example.test")]
     for customer_id, name, email in customers:
         session.execute("""INSERT INTO customers(workspace_id, id, name, email)

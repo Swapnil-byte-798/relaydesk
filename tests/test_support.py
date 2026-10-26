@@ -30,7 +30,7 @@ class SupportTests(unittest.TestCase):
     def tearDown(self):
         # PostgreSQL CI keeps other test workspaces separate. Clean only this workspace.
         with self.database.transaction() as session:
-            for table in ["refunds", "approvals", "events", "runs", "messages", "tickets", "orders", "customers"]:
+            for table in ["refunds", "ticket_approvals", "approvals", "events", "runs", "messages", "tickets", "orders", "customers"]:
                 session.execute(f"DELETE FROM {table} WHERE workspace_id=:workspace", {"workspace": self.workspace})
             session.execute("DELETE FROM workspaces WHERE id=:workspace", {"workspace": self.workspace})
         self.database.close()
@@ -97,6 +97,17 @@ class SupportTests(unittest.TestCase):
         second = self.send("Please refund RD-1043", ticket=second_ticket)
         self.assertEqual(first["approval"]["id"], second["approval"]["id"])
         self.assertEqual(len(self.service.snapshot()["approvals"]), 1)
+
+    def test_decision_updates_every_ticket_linked_to_the_same_refund(self):
+        approval = self.request_refund()
+        second_ticket = self.service.create_ticket("maya")["id"]
+        self.send("Please refund RD-1043", ticket=second_ticket)
+        self.service.decide_refund(approval, "approved", "reviewer")
+        self.assertEqual(self.service.ticket_detail(self.ticket)["status"], "resolved")
+        second = self.service.ticket_detail(second_ticket)
+        self.assertEqual(second["status"], "resolved")
+        self.assertEqual(second["approvals"][0]["status"], "approved")
+        self.assertEqual(second["messages"][-1]["role"], "human")
 
     def test_retry_returns_exact_stored_result(self):
         first = self.send("Please refund RD-1043", key="same-request")

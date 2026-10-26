@@ -36,13 +36,26 @@ def parser() -> argparse.ArgumentParser:
     commands = root.add_subparsers(dest="command", required=True)
     for name in ["init", "status", "tickets", "approvals", "handoffs", "token", "configure-groq"]:
         commands.add_parser(name)
-    chat = commands.add_parser("chat"); chat.add_argument("--customer", default="maya"); chat.add_argument("--ticket")
-    ask = commands.add_parser("ask"); ask.add_argument("message"); ask.add_argument("--customer", default="maya"); ask.add_argument("--ticket"); ask.add_argument("--request-key")
-    inspect = commands.add_parser("inspect"); inspect.add_argument("ticket_id")
+    chat = commands.add_parser("chat")
+    chat.add_argument("--customer", default="maya")
+    chat.add_argument("--ticket")
+    ask = commands.add_parser("ask")
+    ask.add_argument("message")
+    ask.add_argument("--customer", default="maya")
+    ask.add_argument("--ticket")
+    ask.add_argument("--request-key")
+    inspect = commands.add_parser("inspect")
+    inspect.add_argument("ticket_id")
     for name in ["approve", "reject"]:
-        decision = commands.add_parser(name); decision.add_argument("approval_id"); decision.add_argument("--note", default="")
-    reply = commands.add_parser("reply"); reply.add_argument("ticket_id"); reply.add_argument("message"); reply.add_argument("--resolve", action="store_true")
-    serve = commands.add_parser("serve"); serve.add_argument("--port", type=int, default=8013)
+        decision = commands.add_parser(name)
+        decision.add_argument("approval_id")
+        decision.add_argument("--note", default="")
+    reply = commands.add_parser("reply")
+    reply.add_argument("ticket_id")
+    reply.add_argument("message")
+    reply.add_argument("--resolve", action="store_true")
+    serve = commands.add_parser("serve")
+    serve.add_argument("--port", type=int, default=8013)
     return root
 
 
@@ -107,6 +120,9 @@ def main(argv=None) -> int:
     except (SupportError, ValueError) as exc:
         print(f"RelayDesk: {exc}", file=sys.stderr)
         return 1
+    except KeyboardInterrupt:
+        print("\nRelayDesk stopped.", file=sys.stderr)
+        return 130
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ class ProviderTests(unittest.TestCase):
     def plan(self, **changes):
         return {"intent": "order", "order_id": "RD-1042", "sentiment": "neutral", "reason": "Check order", "query": "Where is RD-1042?", **changes}
 
-    def test_live_provider_contract_uses_one_validated_request(self):
+    def test_groq_contract_uses_one_validated_request(self):
         requests = []
         def transport(request, timeout):
             requests.append(request)

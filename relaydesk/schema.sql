@@ -103,8 +103,16 @@ CREATE TABLE IF NOT EXISTS refunds (
     UNIQUE (workspace_id, order_id),
     FOREIGN KEY (workspace_id, order_id) REFERENCES orders(workspace_id, id)
 );
+CREATE TABLE IF NOT EXISTS ticket_approvals (
+    workspace_id TEXT NOT NULL,
+    ticket_id TEXT NOT NULL,
+    approval_id TEXT NOT NULL REFERENCES approvals(id) ON DELETE CASCADE,
+    PRIMARY KEY (ticket_id, approval_id),
+    FOREIGN KEY (workspace_id, ticket_id) REFERENCES tickets(workspace_id, id) ON DELETE CASCADE
+);
 CREATE INDEX IF NOT EXISTS orders_by_customer ON orders(workspace_id, customer_id);
 CREATE INDEX IF NOT EXISTS tickets_by_status ON tickets(workspace_id, status, updated_at);
 CREATE INDEX IF NOT EXISTS messages_by_ticket ON messages(workspace_id, ticket_id, sequence_no);
 CREATE INDEX IF NOT EXISTS events_by_run ON events(workspace_id, run_id, step);
 CREATE INDEX IF NOT EXISTS approvals_by_status ON approvals(workspace_id, status);
+CREATE INDEX IF NOT EXISTS ticket_approvals_by_request ON ticket_approvals(workspace_id, approval_id);

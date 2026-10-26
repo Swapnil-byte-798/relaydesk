@@ -18,11 +18,11 @@ flowchart TD
   F --> L["Curated knowledge"]
 ```
 
-SQLite provides a zero-setup local SQL database through Python's standard library. The optional SQLAlchemy adapter uses PostgreSQL with the same named-parameter repository queries. PostgreSQL locks the ticket/order/approval rows needed for a state transition; local SQLite serializes writes with BEGIN IMMEDIATE. No new frontend language is introduced for deployment convenience.
+SQLite provides a zero-setup local SQL database through Python's standard library. The optional SQLAlchemy adapter uses PostgreSQL with the same named-parameter repository queries. PostgreSQL serializes state transitions with a workspace row lock and also locks the ticket/order/approval rows; local SQLite serializes writes with BEGIN IMMEDIATE. No new frontend language is introduced for deployment convenience.
 
 The optional Groq router makes at most one JSON-mode request per turn. Its output is validated and its order ID must be present in the customer's own conversation. Deterministic server policy decides eligibility. Operational replies come from tool results; the LLM never receives an execute-refund tool.
 
-Conversations, run results, node traces, approvals, and refund records are durable. A completed retry returns its saved response. A failed transaction rolls back all its writes. This release executes one short, bounded turn in a database transaction; it does not implement autonomous agents, streaming responses, or a background queue.
+Conversations, run results, node traces, approvals, and refund records are durable. A ticket-to-approval linking table keeps every ticket following the same request up to date. A completed retry returns its saved response snapshot; a fresh ticket read returns current state. A failed transaction rolls back all its writes. This release executes one short, bounded turn in a database transaction; it does not implement autonomous agents, streaming responses, or a background queue.
 
 ## Access model
 

@@ -47,4 +47,4 @@ python scripts/evaluate.py
 
 The evaluation reports scripted sandbox outcomes in rules mode; it is not a measure of general language-model quality. The optional API and PostgreSQL adapter are also checked in GitHub Actions when their dependencies are available.
 
-See [requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [functional contracts](docs/FRD.md), and [study notes](docs/STUDY_GUIDE.md). The stack follows the owner's resume: Python, SQL, PostgreSQL/SQLAlchemy, FastAPI, unit testing, Docker, GitHub, and LLM APIs. [AGENTS.md](AGENTS.md) records that project constraint.
+See [requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [functional contracts](docs/FRD.md), [run instructions](docs/RUNBOOK.md), and [study notes](docs/STUDY_GUIDE.md). The stack follows the owner's resume: Python, SQL, PostgreSQL/SQLAlchemy, FastAPI, unit testing, Docker, GitHub, and LLM APIs. [AGENTS.md](AGENTS.md) records that project constraint.

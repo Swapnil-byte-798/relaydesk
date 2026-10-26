@@ -1,0 +1,12 @@
+.git
+.venv
+.relaydesk
+.env
+.env.*
+__pycache__
+.pytest_cache
+dist
+build
+*.egg-info
+tests
+evaluations

@@ -15,6 +15,11 @@ class SupportTools:
         self.ticket = ticket
         self.now = now
 
+    def _link_approval(self, approval_id: str) -> None:
+        self.session.execute("""INSERT INTO ticket_approvals(workspace_id, ticket_id, approval_id)
+            VALUES (:workspace, :ticket, :approval) ON CONFLICT (ticket_id, approval_id) DO NOTHING""",
+            {"workspace": self.workspace, "ticket": self.ticket["id"], "approval": approval_id})
+
     def get_order(self, order_id: str) -> dict | None:
         return self.session.one(self.session.lock("""SELECT * FROM orders
             WHERE workspace_id=:workspace AND id=:id AND customer_id=:customer"""),
@@ -29,6 +34,7 @@ class SupportTools:
                                     {"workspace": self.workspace, "order": scoped_order["id"]})
         policy = refund_policy(scoped_order, self.now)
         if existing is not None:
+            self._link_approval(existing["id"])
             return existing, policy
         if not policy["eligible"]:
             return None, policy
@@ -42,4 +48,5 @@ class SupportTools:
         self.session.execute("""INSERT INTO approvals
             (id, workspace_id, ticket_id, customer_id, order_id, amount_paise, status, reason, policy_json, created_at)
             VALUES (:id, :workspace_id, :ticket_id, :customer_id, :order_id, :amount_paise, :status, :reason, :policy_json, :created_at)""", approval)
+        self._link_approval(approval["id"])
         return approval, policy

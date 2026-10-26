@@ -28,6 +28,15 @@ def mentioned_order(message: str, history: list[dict]) -> str | None:
     return None
 
 
+def supplies_missing_refund_number(message: str, history: list[dict], order_id: str | None) -> bool:
+    if not order_id or re.search(r"where|status|track|kahan", message, re.I):
+        return False
+    previous = next((item for item in reversed(history) if item["role"] == "customer"), None)
+    if previous is None or ORDER_PATTERN.search(previous["content"]):
+        return False
+    return bool(re.search(r"refund|\breturn\b|money back|paise wapas", previous["content"], re.I))
+
+
 def rule_plan(message: str, history: list[dict]) -> Plan:
     order_id = mentioned_order(message, history)
     if HUMAN_PATTERN.search(message) or UNSAFE_PATTERN.search(message):
@@ -38,11 +47,7 @@ def rule_plan(message: str, history: list[dict]) -> Plan:
         intent = "refund"
     elif re.search(r"password|log.?in|sign.?in|reset|\bapp\b|crash|error|payment|charged|website|checkout|technical|policy|working|\bhelp\b", message, re.I):
         intent = "technical"
-    elif order_id and history and not re.search(r"where|status|track|kahan", message, re.I) and any(
-        re.search(r"refund|\breturn\b|money back|paise wapas", entry["content"], re.I)
-        and not ORDER_PATTERN.search(entry["content"])
-        for entry in [next((item for item in reversed(history) if item["role"] == "customer"), {"content": ""})]
-    ):
+    elif supplies_missing_refund_number(message, history, order_id):
         intent = "refund"
     elif order_id or re.search(r"order|track|delivery|parcel|package|shipp|kahan|kab aayega", message, re.I):
         intent = "order"
@@ -113,7 +118,7 @@ class GroqRouter:
             data = json.loads(raw)
             plan = validate_plan(json.loads(data["choices"][0]["message"]["content"]), message, history)
             usage = data.get("usage", {})
-            def token_count(name):
+            def token_count(name: str) -> int:
                 count = usage.get(name, 0)
                 return count if isinstance(count, int) and not isinstance(count, bool) and 0 <= count <= 1_000_000 else 0
             return RoutingResult(plan, "groq", 1, token_count("prompt_tokens"), token_count("completion_tokens"))
